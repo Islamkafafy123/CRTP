@@ -56,4 +56,18 @@ powershell –encodedcommand
 $env:PSExecutionPolicyPreference="bypass"
 ```
 # Bypassing PowerShell Security
+- use Invisi-Shell (https://github.com/OmerYa/Invisi-Shell) for bypassing the security controls in PowerShell.
+  - The tool hooks the .NET assemblies (System.Management.Automation.dll and System.Core.dll) to bypass logging
+- Using Invisi-Shell
+  - With admin privileges: RunWithPathAsAdmin.bat
+  - With non-admin privileges: RunWithRegistryNonAdmin.bat
+  - Type exit from the new PowerShell session to complete the clean-up.
+- We can always load scripts in memory and avoid detection using AMSI bypass
+- to  bypass signature based detection of on-disk PowerShell scripts by Windows Defender
+- use the AMSITrigger (https://github.com/RythmStick/AMSITrigger) tool to identify the exact part of a script that is detected
+- provide path to the script file to scan it
+```
+AmsiTrigger_x64.exe -i C:\AD\Tools\Invoke-PowerShellTcp_Detected.ps1
+```
+- For full obfuscation of PowerShell scripts, see Invoke-Obfuscation (https://github.com/danielbohannon/Invoke-Obfuscation).
 
