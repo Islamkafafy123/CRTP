@@ -48,3 +48,12 @@ Get-Command -Module <modulename>
     - when script is running it steps in and askes the av for this script if its in the signutes the av has or not
   - Constrained Language Mode (CLM) - Integrated with Applocker and WDAC (Device Guard)
     -  language mode of PowerShell designed to support day-to-day administrative tasks, yet restrict access to sensitive language elements that can be used to invoke arbitrary Windows APIs
+- Execution Poilcy is NOT a security measure, it is present to prevent user from accidently executing scripts and to bypass
+```
+powershell –ExecutionPolicy bypass
+powershell –c <cmd>
+powershell –encodedcommand
+$env:PSExecutionPolicyPreference="bypass"
+```
+# Bypassing PowerShell Security
+
