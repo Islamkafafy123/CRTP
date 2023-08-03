@@ -70,4 +70,9 @@ $env:PSExecutionPolicyPreference="bypass"
 AmsiTrigger_x64.exe -i C:\AD\Tools\Invoke-PowerShellTcp_Detected.ps1
 ```
 - For full obfuscation of PowerShell scripts, see Invoke-Obfuscation (https://github.com/danielbohannon/Invoke-Obfuscation).
+- to avoid signature based detection are pretty simple:
+  -  Scan using AMSITrigger
+  -  Modify the detected code snippet
+  -  Rescan using AMSITrigger
+  -  Repeat the steps 2 & 3 till we get a result as “AMSI_RESULT_NOT_DETECTED” or “Blank”
 
