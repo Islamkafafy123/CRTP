@@ -150,6 +150,7 @@ Get-DomainSID
 ```
 Get-DomainPolicyData
 (Get-DomainPolicyData).systemaccess
+(Get-DomainPolicyData).kerberospolicy -- > check again to avoid detectio nfor detection mechanism
 
 ```
 - Get domain policy for another domain
@@ -242,5 +243,28 @@ Get-NetLocalGroup -ComputerName dcorp-dc -Recurse
 - Get members of the local group "Administrators" on a machine (needs administrator privs on non-dc machines)
 ```
 Get-NetLocalGroupMember -ComputerName dcorp-dc -GroupName Administrators
-
+```
+- Get actively logged users on a computer (needs local admin rights on the target)
+```
+Get-NetLoggedon –ComputerName <servername>
+```
+- Get locally logged users on a computer (needs remote registry on the target - started by-default on server OS)
+```
+Get-LoggedonLocal -ComputerName dcorp-dc
+```
+- Get the last logged user on a computer (needs administrative rights and remote registry on the target)
+```
+Get-LastLoggedOn –ComputerName <servername>
+```
+- Find shares on hosts in current domain
+```
+Invoke-ShareFinder –Verbose
+```
+- Find sensitive files on computers in the domain
+```
+Invoke-FileFinder –Verbose
+```
+- Get all fileservers of the domain
+```
+Get-NetFileServer
 ```
