@@ -111,6 +111,136 @@ $client = New-Object System.$class.TCPClient($IPAddress,$Port)
 # Methodology
 - we need to assume breach
 - It is more likely that an organization has already been compromised, but just hasn't discovered it yet
+- so our approuch is like this :
+
 ![simu](https://github.com/Islamkafafy123/CRTP/blob/main/pictures/simu.jpeg) 
 
+# Domain Enumeration
+- we have to imagine the whole domain after enumration
+- For enumeration
+  - The ActiveDirectory PowerShell module (MS signed and works even in PowerShell CLM)
+    https://docs.microsoft.com/en-us/powershell/module/addsadministration/?view=win10-ps
+    https://github.com/samratashok/ADModule
+  ```
+  Import-Module C:\AD\Tools\ADModule-master\Microsoft.ActiveDirectory.Management.dll
+  Import-Module C:\AD\Tools\ADModule-master\ActiveDirectory\ActiveDirectory.psd1
+  ```
+  - BloodHound (C# and PowerShell Collectors) https://github.com/BloodHoundAD/BloodHound
+  - PowerView (PowerShell) https://github.com/ZeroDayLab/PowerSploit/blob/master/Recon/PowerView.ps1
+  ```
+  . C:\AD\Tools\PowerView.ps1
+  ```
+  - SharpView (C#) - Doesn't support filtering using Pipeline https://github.com/tevora-threat/SharpView/
+- Get current domain
+```
+Get-Domain (PowerView)
+Get-ADDomain (ActiveDirectory Module)
+```
+- Get object of another domain
+```
+Get-Domain –Domain moneycorp.local
+Get-ADDomain -Identity moneycorp.local
+```
+- Get domain SID for the current domain
+```
+Get-DomainSID
+(Get-ADDomain).DomainSID
+```
+- Get domain policy for the current domain
+```
+Get-DomainPolicyData
+(Get-DomainPolicyData).systemaccess
 
+```
+- Get domain policy for another domain
+```
+(Get-DomainPolicyData –domain
+moneycorp.local).systemaccess
+```
+- Get domain controllers for the current domain
+```
+Get-DomainController
+Get-ADDomainController
+
+```
+- Get domain controllers for another domain
+```
+Get-DomainController –Domain moneycorp.local
+Get-ADDomainController -DomainName moneycorp.local -Discover
+```
+- Get a list of users in the current domain
+```
+Get-DomainUser
+Get-DomainUser –Identity student1
+Get-ADUser -Filter * -Properties *
+Get-ADUser -Identity student1 -Properties *
+```
+- Get list of all properties for users in the current domain
+```
+Get-DomainUser -Identity student1 -Properties * 
+Get-DomainUser -Properties samaccountname,logonCount
+Get-ADUser -Filter * -Properties * | select -First 1 | Get-Member -
+MemberType *Property | select Name
+Get-ADUser -Filter * -Properties * | select
+name,logoncount,@{expression={[datetime]::fromFileTime($_.pwdlastset)}}
+```
+- Search for a particular string in a user's attributes:
+```
+Get-DomainUser -LDAPFilter "Description=*built*" |
+Select name,Description
+
+Get-ADUser -Filter 'Description -like "*built*"' -
+Properties Description | select name,Description
+```
+- Get a list of computers in the current domain
+```
+Get-DomainComputer | select Name
+Get-DomainComputer –OperatingSystem "*Server 2016*"
+Get-DomainComputer -Ping
+
+Get-ADComputer -Filter * | select Name
+Get-ADComputer -Filter * -Properties *
+Get-ADComputer -Filter 'OperatingSystem -like "*Server 2016*"' -
+Properties OperatingSystem | select Name,OperatingSystem
+Get-ADComputer -Filter * -Properties DNSHostName | %{TestConnection -Count 1 -ComputerName $_.DNSHostName}
+
+```
+- Get all the groups in the current domain
+```
+Get-DomainGroup | select Name
+Get-DomainGroup –Domain <targetdomain>
+
+Get-ADGroup -Filter * | select Name 
+Get-ADGroup -Filter * -Properties *
+```
+- Get all groups containing the word "admin" in group name
+```
+Get-DomainGroup *admin*
+
+Get-ADGroup -Filter 'Name -like "*admin*"' | select Name
+```
+- Get all the members of the Domain Admins group
+```
+Get-DomainGroupMember -Identity "Domain Admins" -Recurse
+
+Get-ADGroupMember -Identity "Domain Admins" -Recursive 
+```
+- Get the group membership for a user
+```
+Get-DomainGroup –UserName "student1"
+
+Get-ADPrincipalGroupMembership -Identity student1
+```
+- List all the local groups on a machine (needs administrator privs on non-dc machines)
+```
+Get-NetLocalGroup -ComputerName dcorp-dc -ListGroups
+```
+- Get members of all the local groups on a machine (needs administrator privs on non-dc machines)
+```
+Get-NetLocalGroup -ComputerName dcorp-dc -Recurse
+```
+- Get members of the local group "Administrators" on a machine (needs administrator privs on non-dc machines)
+```
+Get-NetLocalGroupMember -ComputerName dcorp-dc -GroupName Administrators
+
+```
