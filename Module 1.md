@@ -347,3 +347,36 @@ Get-DomainGPO -Identity "outout from the cn from the command above"
     - Access Tokens (security context of a process – identity and privs of user)
     - Security Descriptors (SID of the owner, Discretionary ACL (DACL) and System ACL (SACL))
 - Access Control List (ACL)
+  - list of Access Control Entries (ACE) – ACE corresponds to individual permission or audits access. Who has permission and what can be done on an object?
+  - Two types
+    - DACL – Defines the permissions trustees (a user or group) have on an object
+    - SACL – Logs success and failure audit messages when an object is accessed
+  - ACLs are vital to security architecture of AD
+- Get the ACLs associated with the specified object
+```
+Get-DomainObjectAcl -SamAccountName student1 –ResolveGUIDs
+```
+- Get the ACLs associated with the specified prefix to be used for search
+```
+Get-DomainObjectAcl -SearchBase "LDAP://CN=Domain Admins,CN=Users,DC=dollarcorp,DC=moneycorp,DC=local" -ResolveGUIDs -Verbose
+```
+- enumerate ACLs using ActiveDirectory module but without resolving GUIDs
+```
+(Get-Acl'AD:\CN=Administrator,CN=Users,DC=dollarcorp,DC=moneycorp,DC=local').Access
+```
+- Search for interesting ACEs
+```
+Find-InterestingDomainAcl -ResolveGUIDs
+```
+- Get the ACLs associated with the specified path
+```
+Get-PathAcl -Path "\\dcorp-dc.dollarcorp.moneycorp.local\sysvol"
+```
+# Learning Objective 3
+- ACL for the Domain Admins group
+```
+```
+- All modify rights/permissions for the studentx
+```
+```
+# Domain Enumeration - Trusts
