@@ -375,8 +375,24 @@ Get-PathAcl -Path "\\dcorp-dc.dollarcorp.moneycorp.local\sysvol"
 # Learning Objective 3
 - ACL for the Domain Admins group
 ```
+Get-DomainObjectAcl -Identity "Domain Admins" -ResolveGUIDS -verbose
 ```
 - All modify rights/permissions for the studentx
 ```
+Find-InterestingDomainAcl -ResolveGUIDs | ?{$_.IdentityReferenceName -match "student1"}
+no output so we check for groups 
+Find-InterestingDomainAcl -ResolveGUIDs | ?{$_.IdentityReferenceName -match "RDPUsers"}
 ```
 # Domain Enumeration - Trusts
+- trust is a relationship between two domains or forests which allows users of one domain or forest to access resources in the other domain or forest
+- Trust can be automatic (parent-child, same forest etc.) or established (forest, external)
+- Trusted Domain Objects (TDOs) represent the trust relationships in a domain
+- Trust Direction
+  - One-way trust – Unidirectional. Users in the trusted domain can access resources in the trusting domain but the reverse is not true
+  - Two-way trust – Bi-directional. Users of both domains can access resources in the other domain
+  - Transitive – Can be extended to establish trust relationships with other domains
+    - All the default intra-forest trust relationships (Treeroot, Parent-Child) between domains within a same forest are transitive two-way trusts
+  - Nontransitive – Cannot be extended to other domains in the forest. Can be two-way or oneway
+    - This is the default trust (called external trust) between two domains in different forests when forests do not have a trust relationship
+- Default/Automatic Trusts
+  - 
