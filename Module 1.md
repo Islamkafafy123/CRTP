@@ -443,3 +443,19 @@ Get-ForestTrust –Forest eurocorp.local
 Get-ADTrust -Filter 'msDS-TrustForestTrustInfo -ne "$null"'
 ```
 # Learning Objective 4
+- Enumerate all domains in the moneycorp.local forest
+```
+Get-ForestDomain -Verbose
+```
+- Map the trusts of the dollarcorp.moneycorp.local domain
+```
+Get-DomainTrust –Domain  dollarcorp.moneycorp.local domain
+```
+- Map External trusts in moneycorp.local forest
+```
+Get-ForestDomain | %{Get-DomainTrust -Domain $_.Name} | ?{$_.TrustAttributes -eq "FILTER_SIDS"}
+```
+- Identify external trusts of dollarcorp domain. Can you enumerate trusts for a trusting forest?
+```
+Get-ForestDomain -Forest eurocorp.local | %{Get-DomainTrust -Domain $_.Name}
+```
