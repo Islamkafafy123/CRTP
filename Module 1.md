@@ -395,4 +395,51 @@ Find-InterestingDomainAcl -ResolveGUIDs | ?{$_.IdentityReferenceName -match "RDP
   - Nontransitive – Cannot be extended to other domains in the forest. Can be two-way or oneway
     - This is the default trust (called external trust) between two domains in different forests when forests do not have a trust relationship
 - Default/Automatic Trusts
-  - 
+  - Parent-child trust
+    - It is created automatically between the new domain and the domain that precedes it in the namespace hierarchy, whenever a new domain is added in a tree. For example, dollarcorp.moneycorp.local is a child of moneycorp.local
+    - always two-way transitive
+  - Tree-root trust
+    - It is created automatically between whenever a new domain tree is added to a forest root
+    - always two-way transitive
+- External Trusts
+  - Between two domains in different forests when forests do not have a trust relationship
+  - Can be one-way or twoway and is nontransit
+- Forest Trusts
+  - Between forest root domain
+  - Cannot be extended to a third forest (no implicit trust)
+  - Can be one-way or two-way and transitive or nontransitive.
+- Domain Trust mapping
+- Get a list of all domain trusts for the current domain
+```
+Get-DomainTrust
+Get-DomainTrust –Domain us.dollarcorp.moneycorp.local
+Get-ADTrust
+Get-ADTrust –Identity us.dollarcorp.moneycorp.local
+```
+- Forest mapping
+- Get details about the current forest
+```
+Get-Forest
+Get-Forest –Forest eurocorp.local
+Get-ADForest
+Get-ADForest –Identity eurocorp.local
+```
+- Get all domains in the current forest
+```
+Get-ForestDomain
+Get-ForestDomain –Forest eurocorp.local
+(Get-ADForest).Domains
+```
+- Get all global catalogs for the current forest
+```
+Get-ForestGlobalCatalog
+Get-ForestGlobalCatalog –Forest eurocorp.local
+Get-ADForest | select -ExpandProperty GlobalCatalogs
+```
+- Map trusts of a forest
+```
+Get-ForestTrust
+Get-ForestTrust –Forest eurocorp.local
+Get-ADTrust -Filter 'msDS-TrustForestTrustInfo -ne "$null"'
+```
+# Learning Objective 4
