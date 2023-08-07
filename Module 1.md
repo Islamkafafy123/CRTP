@@ -268,4 +268,39 @@ Invoke-FileFinder –Verbose
 ```
 Get-NetFileServer
 ```
-- 
+# Learning Objective 1
+- first intall invishell
+- and powerview
+- Users
+```
+Get-DomainUser | Select -ExpandProberty samaccountname
+```
+- Computers
+```
+Get-DomainUser | Select -ExpandProberty dnshostname 
+```
+- Domain Administartor
+```
+Get-DomainGroupMember -Identity "Domain Admins" -Recurse
+```
+- Enterprise Administrator
+```
+Get-DomainGroupMember -Identity "Enterprise Admims" -Domain <domainname>
+```
+# Domain Enumration - GPO
+- Group Policy provides the ability to manage configuration and changes easily and centrally in AD
+- Allows configuration of
+  - Security settings
+  - Registry-based policy settings
+  - Group policy preferences like startup/shutdown/log-on/logoff scripts settings
+  - Software installation
+- GPO can be abused for various attacks like privesc, backdoors, persistence etc
+- Get list of GPO in current domain
+```
+Get-DomainGPO
+Get-DomainGPO -ComputerIdentity dcorp-student1
+```
+- Get GPO(s) which use Restricted Groups or groups.xml for interesting users
+```
+Get-DomainGPOLocalGroup
+```
