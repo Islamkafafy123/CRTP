@@ -314,4 +314,36 @@ Get-DomainGPOComputerLocalGroupMapping –ComputerIdentity dcorp-student1
 Get-DomainGPOUserLocalGroupMapping -Identity student1 -Verbose
 ```
 # Domain Enumeration - OU
-- 
+- Get OUs in a domain
+```
+Get-DomainOU
+Get-ADOrganizationalUnit -Filter * -Properties *
+```
+- Get GPO applied on an OU. Read GPOname from gplink attribute fromGet-NetOU
+```
+Get-DomainGPO -Identity "{AB306569-220D-43FF-B03B83E8F4EF8081}"
+```
+# Learning Objective 2
+– List all the OUs
+```
+Get-DomainOU | select -ExpandProberty name
+```
+- List all the computers in the StudentMachines OU
+```
+(Get-DomainOU -Identity StudentMachines).distinguishedname | %{Get-DomainComputer -SearchBase $_} | select name 
+```
+- List the GPOs
+```
+Get-DomainGPO | select Displayname
+```
+- Enumerate GPO applied on the StudentMachines OU
+```
+(Get-DomainOU -Identity StudentMachines).gplink
+Get-DomainGPO -Identity "outout from the cn from the command above"
+```
+# Domain Enumeration - ACL
+- Access Control Model
+  - Enables control on the ability of a process to access objects and other resources in active directory based on
+    - Access Tokens (security context of a process – identity and privs of user)
+    - Security Descriptors (SID of the owner, Discretionary ACL (DACL) and System ACL (SACL))
+- Access Control List (ACL)
