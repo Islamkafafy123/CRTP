@@ -32,3 +32,13 @@ Get-DomainComputer
 ```
 Get-NetSession/Get-NetLoggedon
 ```
+- Find computers where a domain admin session is available and current user has admin access (uses Test-AdminAccess)
+```
+Find-DomainUserLocation -CheckAccess
+```
+- Find computers (File Servers and Distributed File servers) where a domain admin session is available
+```
+Find-DomainUserLocation –Stealth
+```
+# Privilege Escalation
+-
