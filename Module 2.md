@@ -41,4 +41,10 @@ Find-DomainUserLocation -CheckAccess
 Find-DomainUserLocation –Stealth
 ```
 # Privilege Escalation
--
+- various ways of locally escalating privileges on Windows box
+  - Missing patches
+  - Automated deployment and AutoLogon passwords in clear text
+  - AlwaysInstallElevated (Any user can run MSI as SYSTEM)
+  - Misconfigured Services
+  - DLL Hijacking and more
+  - NTLM Relaying a.k.a. Won't Fix
